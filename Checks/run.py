@@ -128,13 +128,13 @@ if os.path.isfile(p):
     if n > 5: hits.append("Me/Interview.md  질문 %d개 (5개 이하여야 함)" % n)
 record("C6", "인터뷰 질문 수 (현재 %d개)" % n, hits, "5개 이하")
 
-# ---- AGENT.md 표 읽기 (C7·C8 공용) ----
-AGENT = os.path.join(ROOT, "AGENT.md")
+# ---- AGENTS.md 표 읽기 (C7·C8 공용) ----
+AGENT = os.path.join(ROOT, "AGENTS.md")
 BACKTICK = re.compile(r'`([^`]+)`')
 PLACEHOLDER = re.compile(r'[<>]|YYYY')
 
 def agent_table(heading):
-    """AGENT.md의 해당 제목 아래 첫 표의 행을 [셀 리스트]로 돌려준다."""
+    """AGENTS.md의 해당 제목 아래 첫 표의 행을 [셀 리스트]로 돌려준다."""
     if not os.path.isfile(AGENT): return []
     rows, inside, seen = [], False, False
     for ln in lines(AGENT):
@@ -158,21 +158,21 @@ def agent_table(heading):
 hits, n = [], 0
 rows = agent_table("산출물 형식")
 if not rows:
-    hits.append("AGENT.md  '산출물 형식' 표를 찾지 못했다")
+    hits.append("AGENTS.md  '산출물 형식' 표를 찾지 못했다")
 for cells in rows:
     if len(cells) < 2: continue
     for m in BACKTICK.findall(cells[1]):
         if not m.startswith("Template/"): continue
         n += 1
         if not os.path.isfile(os.path.join(ROOT, m)):
-            hits.append("AGENT.md 산출물 형식 표  %s → 파일 없음" % m)
+            hits.append("AGENTS.md 산출물 형식 표  %s → 파일 없음" % m)
 record("C7", "규칙이 가리키는 템플릿 (%d개 확인)" % n, hits)
 
 # C8 — 규칙이 가리키는 파일·폴더가 실제로 있나
 hits, n, base = [], 0, ""
 rows = agent_table("파일 구조")
 if not rows:
-    hits.append("AGENT.md  '파일 구조' 표를 찾지 못했다")
+    hits.append("AGENTS.md  '파일 구조' 표를 찾지 못했다")
 for cells in rows:
     if len(cells) < 2: continue
     cat = BACKTICK.sub("", cells[0]).replace("*", "").strip()
@@ -181,7 +181,7 @@ for cells in rows:
         if base:
             n += 1
             if not os.path.isdir(os.path.join(ROOT, base)):
-                hits.append("AGENT.md 파일 구조 표  %s/ → 폴더 없음" % base)
+                hits.append("AGENTS.md 파일 구조 표  %s/ → 폴더 없음" % base)
                 base = ""; continue
     for m in BACKTICK.findall(cells[1]):
         if PLACEHOLDER.search(m): continue
@@ -189,7 +189,7 @@ for cells in rows:
         path = os.path.join(ROOT, base, m) if base else os.path.join(ROOT, m)
         ok = os.path.isdir(path) if m.endswith("/") else os.path.isfile(path)
         if not ok:
-            hits.append("AGENT.md 파일 구조 표  %s → 없음" % os.path.join(base, m))
+            hits.append("AGENTS.md 파일 구조 표  %s → 없음" % os.path.join(base, m))
 record("C8", "규칙이 가리키는 파일·폴더 (%d개 확인)" % n, hits)
 
 # C9 — 배운 것의 줄 형식
