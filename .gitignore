@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Obsidian — 캐시
+.obsidian
+
+# Obsidian 휴지통 (R1: 삭제 금지지만, 옵시디언이 자체적으로 만드는 경로)
+.trash/
+
+# 에이전트 작업 중 생기는 임시 파일
+*.tmp
